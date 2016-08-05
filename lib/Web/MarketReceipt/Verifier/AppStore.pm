@@ -31,6 +31,7 @@ sub verify {
         hash        => $hash,
         opts        => $args{opts},
     );
+
     if ($res_json->{status} == 21007) {
         $environment = 'Sandbox';
         $res_json = $self->_send_request(
@@ -40,21 +41,31 @@ sub verify {
     }
 
     my $raw_json = $res_json->{receipt};
-
     Web::MarketReceipt->new(
         is_success => $res_json->{status} == 0 ? 1 : 0,
         store      => 'AppStore',
         raw        => $raw_json,
         $res_json->{status} == 0 ? (
-        orders => [ {
-            product_identifier => $raw_json->{product_id},
-            unique_identifier  => 'AppStore:' . $raw_json->{original_transaction_id},
-            purchased_epoch    => int($raw_json->{original_purchase_date_ms} / 1000),
-            state       => 'purchased',
-            quantity    => $raw_json->{quantity},
-            environment => $environment,
-        } ],) : (),
+            exists $raw_json->{in_app} ? (
+                orders => [ map {$self->_order2hash($_, $environment)} @{ $raw_json->{in_app}}],
+            ) : (
+                orders => [$self->_order2hash($raw_json, $environment)],
+            ),
+        ) : (),
     );
+}
+
+sub _order2hash {
+    my ($self, $raw_json, $environment) = @_;
+
+    return {
+        product_identifier => $raw_json->{product_id},
+        unique_identifier  => 'AppStore:' . $raw_json->{original_transaction_id},
+        purchased_epoch    => $raw_json->{original_purchase_date_ms},
+        quantity    => $raw_json->{quantity},
+        environment => $environment,
+        state       => 'purchased',
+    }
 }
 
 sub _send_request {

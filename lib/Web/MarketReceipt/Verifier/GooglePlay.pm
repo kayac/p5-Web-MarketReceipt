@@ -29,8 +29,8 @@ sub verify {
     my ($self, %args) = @_;
 
     # TODO 例外処理
-    my $signed_data    = decode_base64 $args{signed_data};
-    my $signature      = decode_base64 $args{signature};
+    my $signed_data = decode_base64 $args{signed_data};
+    my $signature   = decode_base64 $args{signature};
 
     my $verification_result = $self->public_key->verify($signed_data, $signature);
     my $raw_json = decode_json $signed_data;
@@ -54,10 +54,10 @@ sub _order2hash {
 
     return {
         product_identifier => $order->{productId},
-        unique_identifier => 'GooglePlay:' . $order->{orderId},
-        purchased_epoch => int( $order->{purchaseTime}/1000 ),
-        state => $self->_purchase_state($order->{purchaseState}),
-        quantity => 1,
+        unique_identifier  => 'GooglePlay:' . $order->{orderId},
+        purchased_epoch    => int( $order->{purchaseTime}/1000 ),
+        state       => $self->_purchase_state($order->{purchaseState}),
+        quantity    => 1,
         environment => 'Production',
     };
 }
