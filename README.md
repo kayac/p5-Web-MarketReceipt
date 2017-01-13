@@ -2,8 +2,6 @@
 
 Web::MarketReceipt - iOS and Android receipt verification module.
 
-[![Build Status](https://travis-ci.org/kayac/p5-Web-MarketReceipt.svg?branch=master)](https://travis-ci.org/kayac/p5-Web-MarketReceipt)
-
 # SYNOPSIS
 
     use Web::MarketReceipt::Verifier::AppStore;
