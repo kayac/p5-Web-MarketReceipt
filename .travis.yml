@@ -3,5 +3,9 @@ perl:
     - "5.22"
     - "5.20"
     - "5.18"
+before_install:
+    - cpanm Carton
 install:
-    cpanm --quiet --installdeps --notest --with-develop .
+    - carton install
+script:
+    - carton exec prove -lrv t
