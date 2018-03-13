@@ -31,10 +31,12 @@ sub _default_verifier {
     my %underscored = (
         map {
             my $key = $_;
-            ($key =~ s/-/_/gr) => $purchase_info->{$key}
+            $key =~ s/-/_/g;
+            $key => $purchase_info->{$_}
         } keys %$purchase_info
     );
-    my $environment = $parsed->{environment} // 'Production';
+    my $environment = exists $parsed->{environment} ?
+        $parsed->{environment} : 'Production';
 
     my $result = Web::MarketReceipt->new(
         is_success => 1,
