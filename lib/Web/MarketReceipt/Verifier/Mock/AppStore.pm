@@ -78,7 +78,7 @@ sub _parse_oldstlye_plist {
 
     my $data = decode_base64($text);
     my ($properties_str) = $data =~ /{(.*)}/s;
-    my %kv = $properties_str =~ /\s*"(\S+)"\s*=\s*"(.+)";/g;
+    my %kv = $properties_str =~ /\s*"(.*?)"\s*=\s*"(.*?)"\s*;/msg;
 
     return \%kv;
 }
