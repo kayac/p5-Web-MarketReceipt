@@ -73,6 +73,8 @@ sub _parse_receipt {
     return $data;
 }
 
+# XXX: This parser is poor but I look work with a receipt from appstore.
+# If that do not parse at your receipt, please report issues or pull requests.
 sub _parse_oldstlye_plist {
     my ($class, $text) = @_;
 
