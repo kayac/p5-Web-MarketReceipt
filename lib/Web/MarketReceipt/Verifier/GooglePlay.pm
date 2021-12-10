@@ -10,8 +10,6 @@ use Crypt::OpenSSL::RSA;
 use MIME::Base64;
 use JSON::XS;
 
-use Web::MarketReceipt::Order;
-
 subtype 'Crypt::OpenSSL::RSA' => as 'Object' => where { $_->isa('Crypt::OpenSSL::RSA') };
 coerce  'Crypt::OpenSSL::RSA'
     => from 'Str',
@@ -67,15 +65,16 @@ sub _order2hash {
 sub _purchase_state {
     my ($self, $purchase_state) = @_;
 
-    if ($purchase_state == OrderState.purchased) {
+    # Web::MarketReceipt::OrderモジュールのOrderStateにも追加が必要
+    if ($purchase_state == 0) {
         return 'purchased';
-    } elsif ($purchase_state == OrderState.canceled) {
+    } elsif ($purchase_state == 1) {
         return 'canceled';
-    } elsif ($purchase_state == OrderState.refunded) {
+    } elsif ($purchase_state == 2) {
         return 'refunded';
-    } elsif ($purchase_state == OrderState.expired) {
+    } elsif ($purchase_state == 3) {
         return 'expired';
-    } elsif ($purchase_state == OrderState.pending) {
+    } elsif ($purchase_state == 4) {
         return 'pending';
     }
 
